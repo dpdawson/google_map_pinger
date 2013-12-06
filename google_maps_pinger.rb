@@ -11,6 +11,10 @@ timer = Time.now
   url = "http://maps.googleapis.com/maps/api/geocode/json?language=en&address=a#{i}&sensor=false"
   uri = URI.parse(url)
   response = Net::HTTP.get_response(uri)
+  sleep(time_to_wait_between_pings)
+  count += 1
+  print "#{count} " if count % 10 == 0
+=begin
   count += 1
   if count == 5 && (Time.now - timer) < 0.8
     p i, 'calls done, sleeping ...'
@@ -21,6 +25,7 @@ timer = Time.now
     count = 0
     timer = Time.now
   end
+=end
   if JSON.parse(response.body)["status"] == "OVER_QUERY_LIMIT"
     p count, (Time.now - timer)
     timer = Time.now
@@ -28,5 +33,4 @@ timer = Time.now
     p "Address #{i}"
     p JSON.parse(response.body)["status"]
   end
-
 end
